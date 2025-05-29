@@ -72,14 +72,17 @@ class MyBotClient(commands.Cog):
 # Register the cog and sync slash commands
 @bot.event
 async def on_ready():
-    print(f"Bot is online as {bot.user}")
-    try:
-        synced = await bot.tree.sync()
-        print(f"Slash commands synced globally: {len(synced)}")
-    except Exception as e:
-        print(f"Error during command sync: {e}")
+    print(f"✅ Bot is online as {bot.user}")
 
-    await bot.add_cog(MyBotClient(bot))
+    try:
+        # Register the cog first
+        await bot.add_cog(MyBotClient(bot))
+
+        # Then sync the slash commands globally (includes DM support)
+        synced = await bot.tree.sync()
+        print(f"📡 Synced {len(synced)} global slash commands.")
+    except Exception as e:
+        print(f"❌ Error during command sync: {e}")
 
 # Run the bot
 bot.run(DISCORD_TOKEN)
